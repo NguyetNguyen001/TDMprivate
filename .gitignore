@@ -166,3 +166,5 @@ cython_debug/
 *.jpeg
 *.svg
 *.png
+
+*.DS_Store
