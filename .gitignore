@@ -171,4 +171,10 @@ cython_debug/
 *.svg
 *.png
 
+*.avi
+*.mov
+*.mp4
+
+/code/videos
+
 *.DS_Store
