@@ -8,3 +8,4 @@ plotly
 dash
 kaleido
 xlsxwriter
+rpy2
