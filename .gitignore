@@ -48,6 +48,8 @@ venv.bak/
 
 # Other, our DriveOhio project-specific preferences 
 
+__pycache__
+
 *.csv
 *.xlsx
 *.xlsm
