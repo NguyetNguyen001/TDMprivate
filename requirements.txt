@@ -9,3 +9,4 @@ dash
 kaleido
 xlsxwriter
 rpy2
+pytorch
