@@ -54,6 +54,8 @@ __pycache__
 *.xlsx
 *.xlsm
 /code/data
+/data
+
 
 # prevent maps
 *.jpeg
