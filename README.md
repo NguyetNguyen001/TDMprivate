@@ -13,7 +13,7 @@ Many notebooks will first attempt to use these .csv files, preventing repeat que
 
 __NOTE: Chassis queries take time, often 5+ minutes.__
 
-## Spring '23 Team Members
+## Spring '24 Team Members
 
 - Jay Kerns (Instructor)
 - Emmanuel Asamanyuah
