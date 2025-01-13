@@ -695,27 +695,53 @@ def Acceleration_chassistime( time_sorted_chassis_df ):
 # In[2]:
 
 
-def Acceleration_bestposetime( time_sorted_merged_chassisbestpose_df ):
+def Acceleration( time_sorted_chassis_df, time_interval = 1 ):
 
-    unique_best_pose_time_array = np.unique( np.array( time_sorted_merged_chassisbestpose_df[ 'time_y' ] ) )
+    speedMps_array = np.array( time_sorted_chassis_df[ 'speedMps' ] )
 
-    acceleration_list = [] # meters/second^2
+    time_array = np.array( time_sorted_chassis_df[ 'time' ] ) * 1e-9 # seconds
 
-    for best_pose_time in unique_best_pose_time_array:
+    time_diff_array = np.diff( time_array )
 
-        time_sorted_merged_chassisbestpose_df_subset = time_sorted_merged_chassisbestpose_df[ time_sorted_merged_chassisbestpose_df[ 'time_y' ] == best_pose_time ]
+    #
 
-        chassis_time_array_subset = np.array( time_sorted_merged_chassisbestpose_df_subset[ 'time_x' ] ) * 1e-9 # seconds 
+    time_diff_sum = 0
 
-        speedMps_array_subset = np.array( time_sorted_merged_chassisbestpose_df_subset[ 'speedMps' ] )
+    index_list = []
 
-        acceleration = ( speedMps_array_subset[ -1 ] - speedMps_array_subset[ 0 ] ) / ( chassis_time_array_subset[ -1 ] - chassis_time_array_subset[ 0 ] )
+    list_of_index_lists = []
 
-        for index in range( len( time_sorted_merged_chassisbestpose_df_subset ) ):
+    for index, time_diff in enumerate( time_diff_array ):
 
-            acceleration_list.append( acceleration )
+        index_list.append( index )
 
-    time_sorted_merged_chassisbestpose_df[ 'Acceleration' ] = acceleration_list
+        time_diff_sum = time_diff_sum + time_diff
+
+        if ( ( time_diff_sum >= time_interval ) or ( index == len( time_diff_array ) - 1 ) ):
+
+            index_list.append( index_list[ -1 ] + 1 )
+
+            list_of_index_lists.append( index_list )
+
+            time_diff_sum = 0
+
+            index_list = []
+
+    #
+
+    acceleration_array = np.array( [ 0. for index in range( len( time_array ) ) ] )
+
+    for ilist in list_of_index_lists:
+
+        speedMps_array_subset = speedMps_array[ ilist ]
+
+        time_array_subset = time_array[ ilist ]
+
+        acceleration = ( speedMps_array_subset[ -1 ] - speedMps_array_subset[ 0 ] ) / ( time_array_subset[ -1 ] - time_array_subset[ 0 ] ) # meters / second ^ 2
+
+        acceleration_array[ ilist ] = acceleration
+
+    time_sorted_chassis_df[ 'Acceleration' ] = acceleration_array
 
 
 # ### Functions unrelated to calculated fields but are important vvv
