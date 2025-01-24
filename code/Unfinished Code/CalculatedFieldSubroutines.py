@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 
 import numpy as np
 
 import pandas as pd
+
+import random
 
 import os
 
@@ -546,6 +548,36 @@ def Distance( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'Distance' ] = chassis_Distance_list
 
 
+# In[ ]:
+
+
+def Distance( df ):
+
+    '''
+    Do not use as a standalone metric; vulnerable to time discontinuities. Useful in producing other calculated fields.
+    '''
+
+    time_array = np.array( df[ 'time' ] ) * 1e-9 # seconds
+
+    speedMps_array = np.array( df[ 'speedMps' ] ) # meters/second
+
+    #
+
+    deltatime_array = np.diff( time_array )
+
+    deltatime_array = np.insert( deltatime_array, 0, deltatime_array[ 0 ] )
+
+    #
+
+    deltadistance_array = deltatime_array * speedMps_array #meters
+
+    Distance_col = np.cumsum( deltadistance_array )
+
+    #
+
+    df[ 'Distance' ] = Distance_col
+
+
 # In[12]:
 
 
@@ -742,6 +774,234 @@ def Acceleration( time_sorted_chassis_df, time_interval = 1 ):
         acceleration_array[ ilist ] = acceleration
 
     time_sorted_chassis_df[ 'Acceleration' ] = acceleration_array
+
+
+# In[ ]:
+
+
+def MovingFunction( df, moving_colname, window, operation, desired_colnames ):
+
+    if ( operation == 'mean' ):
+
+        def operation_func( arraylike_obj ): return np.mean( arraylike_obj )
+
+    elif ( operation == 'median' ):
+
+        def operation_func( arraylike_obj ): return np.median( arraylike_obj )
+
+    elif ( operation == 'overall_diff' ):
+
+        def operation_func( arraylike_obj ): return ( arraylike_obj[ -1 ] - arraylike_obj[ 0 ] )
+
+    elif ( operation == 'mean_diff' ):
+
+        def operation_func( arraylike_obj ): 
+
+            if ( len( arraylike_obj ) > 1 ):
+
+                return ( np.mean( np.diff( arraylike_obj ) ) )
+
+            elif ( len( arraylike_obj ) == 1 ):
+
+                return 0
+
+    elif ( operation == 'stddev' ):
+
+        def operation_func( arraylike_obj ): return ( np.std( arraylike_obj ) )
+
+    #
+
+    moving_col = np.array( df[ moving_colname ] )
+
+    moving_col_diff = np.diff( moving_col )
+
+    #
+    
+    desired_cols = [ np.array( df[ desired_colname ] ) for desired_colname in desired_colnames ]
+
+    #
+
+    output_colnames = [ f'{ desired_colname }_{ operation }' for desired_colname in desired_colnames ]
+
+    #
+
+    window_indexes_list = []
+
+    for index in range( 1, len( moving_col ) ):
+
+        window_end_index = index - 1
+
+        #
+
+        value_sum = moving_col_diff[ window_end_index ]
+
+        window_start_index = window_end_index
+
+        while ( ( value_sum < window ) and ( window_start_index > 0 ) ):
+
+            window_start_index = window_start_index - 1
+
+            value_sum = value_sum + moving_col_diff[ window_start_index ]
+
+        #
+
+        window_indexes = [ i for i in range( window_start_index, window_end_index + 1 ) ]
+
+        window_indexes_list.append( window_indexes )
+
+    window_indexes_list = [ window_indexes_list[ 0 ] ] + window_indexes_list
+
+    #
+
+    output_cols = []
+
+    for desired_col in desired_cols:
+
+        output_col = []
+
+        for window_indexes in window_indexes_list:
+
+            output_col.append( operation_func( desired_col[ window_indexes ] ) )
+
+        output_cols.append( output_col )
+
+    #
+
+    for output_colname, output_col in zip( output_colnames, output_cols ):
+
+        df[ output_colname ] = output_col
+
+
+# In[ ]:
+
+
+def BinaryDisengagement( df ):
+
+    TernaryDrivingModeTransition_col = df[ 'TernaryDrivingModeTransition' ]
+
+    BinaryDisengagement_col = []
+
+    for val in TernaryDrivingModeTransition_col:
+
+        if ( ( val == 0 ) or ( val == 1 ) ):
+
+            BinaryDisengagement_col.append( 0 )
+
+        elif ( val == -1 ):
+
+            BinaryDisengagement_col.append( 1 )
+
+    df[ 'BinaryDisengagement' ] = BinaryDisengagement_col
+
+
+# In[ ]:
+
+
+def BinaryDisengagementExpanded( df, moving_colname, window ):
+
+    moving_col = np.array( df[ moving_colname ] )
+
+    moving_col_diff = np.diff( moving_col )
+
+    #
+
+    BinaryDisengagement_col = np.array( df[ 'BinaryDisengagement' ] )
+
+    disengagement_indexes = np.where( BinaryDisengagement_col == 1 )[ 0 ]
+
+    #
+    
+    window_indexes_list = []
+
+    for index in disengagement_indexes:
+        
+        window_indexes = [ index ]
+
+        cur_loop_index = index - 1
+
+        value_sum = moving_col_diff[ cur_loop_index ]
+
+        while ( ( value_sum <= window ) and ( cur_loop_index > -1 ) ):
+
+            window_indexes = [ cur_loop_index ] + window_indexes
+
+            #
+
+            cur_loop_index = cur_loop_index - 1
+
+            value_sum = value_sum + moving_col_diff[ cur_loop_index ]
+
+        window_indexes_list.append( window_indexes )
+
+    #
+
+    BinaryDisengagementExpanded_col = np.copy( BinaryDisengagement_col )
+
+    for window_indexes in window_indexes_list:
+
+        BinaryDisengagementExpanded_col[ window_indexes ] = 1
+
+    #
+
+    df[ 'BinaryDisengagementExpanded' ] = BinaryDisengagementExpanded_col
+
+
+# In[ ]:
+
+
+def Index( df ):
+
+    num_of_rows = df.shape[ 0 ]
+
+    df[ 'Ind' ] = [ index for index in range( num_of_rows ) ]
+
+
+# In[ ]:
+
+
+def DisengagementID( df, expanded = False ):
+
+    '''
+    Needs adjustment for expanded setting, but can still be used.
+    '''
+
+    gmID = df[ 'groupMetadataID' ][ 0 ]
+    
+    #
+
+    if ( expanded == False ):
+
+        disengagment_col = np.array( df[ 'BinaryDisengagement' ] )
+
+        string1 = ''
+
+        string2 = ''
+
+    elif ( expanded == True ):
+
+        disengagment_col = np.array( df[ 'BinaryDisengagementExpanded' ] )
+
+        string1 = 'Expanded'
+
+        string2 = 'e'
+
+    #
+
+    disengagement_indexes = np.where( disengagment_col == 1 )[ 0 ]
+
+    #
+
+    DisengagementID_col = [ 'NAD' for i in disengagment_col ]
+
+    counter = 0
+
+    for index in disengagement_indexes:
+
+        DisengagementID_col[ index ] = f'{ gmID }_{ counter }{ string2 }'
+
+        counter = counter + 1
+
+    df[ f'Disengagement{ string1 }ID' ] = DisengagementID_col
 
 
 # ### Functions unrelated to calculated fields but are important vvv
@@ -992,5 +1252,19 @@ def list_blacklisted_gmIDs():
 # In[ ]:
 
 
+def random_list_split( input_list, split_percentage = 0.5 ):
 
+    randomized_input_list = random.shuffle( input_list )
+
+    #
+
+    list_len = len( input_list )
+
+    split_index = round( list_len * split_percentage )
+
+    split_list1 = input_list[ : split_index ]
+
+    split_list2 = input_list[ split_index : ]
+
+    return split_list1, split_list2
 

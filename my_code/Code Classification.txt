@@ -1,0 +1,12 @@
+F - Finished (a notebook intended to be viewed/used by others that had its code finished)
+UF - Unfinished (a notebook intended to be viewed/used by others but has not had its code finished yet)
+CU - Continually Updated (a notebook intended to be viewed/used by others that will never truly have its code finished and is                                  designed to be continually updated)
+
+D - Documented (a notebook intended to be viewed/used by others that is fully documented)
+UD - Undocumented (a notebook intended to be viewed/used by others that is not fully documented yet)
+
+R - Redundant (a notebook intended to be viewed/used by others that was replaced with a newer notebook that [hopefully] does                        what it does better)
+
+S - Scratch Notebook (a notebook not intended to be viewed/used by others and was likely just made for testing and not meant to be                         finished or documented)
+
+M - Module (a notebook intended to be downloaded as a .py file and called as a module in other notebooks)
