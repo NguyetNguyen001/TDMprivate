@@ -441,10 +441,10 @@ def ProgressAlongRoute_v2( time_sorted_best_pose_df, time_sorted_reference_best_
         return False
 
 
-# In[9]:
+# In[5]:
 
 
-def NormalizedTime( topic_df ):
+def ZeroedTime( topic_df ):
 
     '''
     Arguments:
@@ -456,7 +456,7 @@ def NormalizedTime( topic_df ):
         
     Internal Task (subroutine):
     
-        Adds an extra column to the Pandas dataframe 'topic_df' argument called 'NormalizedTime'. This column is simply the 'time'
+        Adds an extra column to the Pandas dataframe 'topic_df' argument called 'ZeroedTime'. This column is simply the 'time'
         column in 'topic_df' with all of its time values subtracted by the minimum time value in the 'time' column.
 
     Output:
@@ -465,21 +465,35 @@ def NormalizedTime( topic_df ):
 
     Purpose:
 
-        The 'NormalizedTime' column created by this function for a topic is essentially that topic's 'time' column, but instead of 
+        The 'ZeroedTime' column created by this function for a topic is essentially that topic's 'time' column, but instead of 
         treating the start, end, and all moments in-between of a groupMetadataID's run as time values in nanoseconds representing 
         datetimes, it treats the start as being at 0 nanoseconds, the end as the total duration of the run in nanoseconds, and all
         the moments in-between as how long it has been since the start of the run in nanoseconds.
 
-        The 'NormalizedTime' column is a quick and dirty way to compare two or more different groupMetadataIDs' runs (on the same 
+        The 'ZeroedTime' column is a quick and dirty way to compare two or more different groupMetadataIDs' runs (on the same 
         route) by time. It should be kept in mind though that time is a poor measure of position along a route, as not all runs
         on a route take the same amount of time, nor do they always start at the exact same position.
     '''
 
     topic_time_array = np.array( topic_df[ 'time' ] )
 
-    normalized_topic_time_array = topic_time_array - np.min( topic_time_array )
+    zeroed_topic_time_array = topic_time_array - np.min( topic_time_array )
 
-    topic_df[ 'NormalizedTime' ] = list( normalized_topic_time_array )
+    topic_df[ 'ZeroedTime' ] = list( zeroed_topic_time_array )
+
+
+# In[6]:
+
+
+def NormalizedTime( topic_df ):
+
+    topic_time_array = np.array( topic_df[ 'time' ] )
+
+    zeroed_topic_time_array = topic_time_array - np.min( topic_time_array )
+
+    normalized_topic_time_array = zeroed_topic_time_array / np.max( zeroed_topic_time_array )
+
+    topic_df[ 'NormalizedTime' ] = normalized_topic_time_array
 
 
 # In[10]:
@@ -872,6 +886,116 @@ def MovingFunction( df, moving_colname, window, operation, desired_colnames ):
         df[ output_colname ] = output_col
 
 
+# In[7]:
+
+
+def MovingFunction_v2( df, moving_colname, window, operation, desired_colnames ):
+
+    if ( operation == 'mean' ):
+
+        def operation_func( arraylike_obj ): return np.mean( arraylike_obj )
+
+    elif ( operation == 'median' ):
+
+        def operation_func( arraylike_obj ): return np.median( arraylike_obj )
+
+    elif ( operation == 'overall_diff' ):
+
+        def operation_func( arraylike_obj ): return ( arraylike_obj[ -1 ] - arraylike_obj[ 0 ] )
+
+    elif ( operation == 'mean_diff' ):
+
+        def operation_func( arraylike_obj ): 
+
+            if ( len( arraylike_obj ) > 1 ):
+
+                return ( np.mean( np.diff( arraylike_obj ) ) )
+
+            elif ( len( arraylike_obj ) == 1 ):
+
+                return 0
+
+    elif ( operation == 'stddev' ):
+
+        def operation_func( arraylike_obj ): return ( np.std( arraylike_obj ) )
+
+    #
+
+    desired_cols = [ np.array( df[ desired_colname ] ) for desired_colname in desired_colnames ]
+
+    #
+
+    output_colnames = [ f'{ desired_colname }_{ operation }' for desired_colname in desired_colnames ]
+
+    #
+
+    moving_col = np.array( df[ moving_colname ] )
+
+    moving_col_diff = np.diff( moving_col )
+
+    moving_col_diff_len = len( moving_col_diff )
+
+    #
+
+    moving_col_diff_copy = np.copy( moving_col_diff )
+
+    indexes_behind = np.ones( moving_col_diff_len )
+
+    for index in range( 1, moving_col_diff_len ):
+
+        adding_array = moving_col_diff[ : moving_col_diff_len - index ]
+
+        prepend_array = np.zeros( index )
+
+        adding_array = np.insert( adding_array, 0, prepend_array )
+
+        #
+
+        moving_col_diff_copy = moving_col_diff_copy + adding_array
+
+        moving_col_diff_copy[ : index ] = window + 1
+
+        #
+
+        condition_true_indexes = np.where( moving_col_diff_copy <= window )
+
+        #
+
+        if ( len( condition_true_indexes[ 0 ] ) == 0 ):
+
+            break
+
+        else:
+
+            indexes_behind[ condition_true_indexes ] = index + 1
+
+    #
+
+    output_cols = []
+
+    for desired_col in desired_cols:
+
+        output_col = []
+
+        for i, j in enumerate( indexes_behind ):
+
+            desired_col_slice = desired_col[ i + 1 - int( j ) : i + 1 ]
+
+            value = operation_func( desired_col_slice )
+
+            output_col.append( value )
+
+        output_col = [ output_col[ 0 ] ] + output_col
+
+        output_cols.append( output_col )
+
+    #
+
+    for output_colname, output_col in zip( output_colnames, output_cols ):
+
+        df[ output_colname ] = output_col
+
+
 # In[ ]:
 
 
@@ -1002,6 +1126,54 @@ def DisengagementID( df, expanded = False ):
         counter = counter + 1
 
     df[ f'Disengagement{ string1 }ID' ] = DisengagementID_col
+
+
+# In[3]:
+
+
+def TernaryTurnSignal( chassis_df ):
+
+    turnSignal_col = chassis_df[ 'signal.turnSignal' ]
+
+    TernaryTurnSignal_col = []
+
+    for turnSignal in turnSignal_col:
+
+        if ( turnSignal == 'TURN_NONE' ):
+
+            TernaryTurnSignal_col.append( 0 )
+
+        elif ( turnSignal == 'TURN_RIGHT' ):
+
+            TernaryTurnSignal_col.append( 1 )
+
+        elif ( turnSignal == 'TURN_LEFT' ):
+
+            TernaryTurnSignal_col.append( -1 )
+
+    chassis_df[ 'TernaryTurnSignal' ] = TernaryTurnSignal_col
+
+
+# In[4]:
+
+
+def BinaryContainLights( traffic_df ):
+
+    containLights_col = traffic_df[ 'containLights' ]
+
+    BinaryContainLights_col = []
+
+    for containLights in containLights_col:
+
+        if ( containLights == True ):
+
+            BinaryContainLights_col.append( 1 )
+
+        else:
+
+            BinaryContainLights_col.append( 0 )
+
+    traffic_df[ 'BinaryContainLights' ] = BinaryContainLights_col
 
 
 # ### Functions unrelated to calculated fields but are important vvv
