@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[35]:
 
 
 import numpy as np
@@ -13,7 +13,7 @@ import random
 import os
 
 
-# In[3]:
+# In[36]:
 
 
 def BinaryDrivingMode( chassis_df ):
@@ -61,7 +61,7 @@ def BinaryDrivingMode( chassis_df ):
     chassis_df[ 'BinaryDrivingMode' ] = binary_drive_mode_lst
 
 
-# In[4]:
+# In[37]:
 
 
 def TernaryDrivingModeTransition( time_sorted_chassis_df ):
@@ -108,7 +108,7 @@ def TernaryDrivingModeTransition( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'TernaryDrivingModeTransition' ] = ternary_drive_mode_trans_lst
 
 
-# In[5]:
+# In[38]:
 
 
 def LatLonTotalStdDev( best_pose_df ):
@@ -154,7 +154,7 @@ def LatLonTotalStdDev( best_pose_df ):
     best_pose_df[ 'LatLonTotalStdDev' ] = latlon_total_stddev_lst
 
 
-# In[6]:
+# In[39]:
 
 
 def ChassisBestPoseMatchedTime( same_gmID_chassis_df, same_gmID_best_pose_df ):
@@ -229,7 +229,7 @@ def ChassisBestPoseMatchedTime( same_gmID_chassis_df, same_gmID_best_pose_df ):
     same_gmID_best_pose_df[ 'ChassisBestPoseMatchedTime' ] = same_gmID_best_pose_df[ 'time' ]
 
 
-# In[7]:
+# In[40]:
 
 
 def ProgressAlongRoute( best_pose_df, time_sorted_reference_best_pose_df):
@@ -273,7 +273,7 @@ def ProgressAlongRoute( best_pose_df, time_sorted_reference_best_pose_df):
     best_pose_df[ 'ProgressAlongRoute' ] = current_ProgressAlongRoute_list
 
 
-# In[8]:
+# In[41]:
 
 
 def ProgressAlongRoute_v2( time_sorted_best_pose_df, time_sorted_reference_best_pose_df = 'auto', num_of_partitions = 100, \
@@ -441,7 +441,7 @@ def ProgressAlongRoute_v2( time_sorted_best_pose_df, time_sorted_reference_best_
         return False
 
 
-# In[5]:
+# In[42]:
 
 
 def ZeroedTime( topic_df ):
@@ -482,7 +482,7 @@ def ZeroedTime( topic_df ):
     topic_df[ 'ZeroedTime' ] = list( zeroed_topic_time_array )
 
 
-# In[6]:
+# In[43]:
 
 
 def NormalizedTime( topic_df ):
@@ -496,7 +496,7 @@ def NormalizedTime( topic_df ):
     topic_df[ 'NormalizedTime' ] = normalized_topic_time_array
 
 
-# In[10]:
+# In[44]:
 
 
 def DeltaTime( time_sorted_topic_df ):
@@ -538,7 +538,7 @@ def DeltaTime( time_sorted_topic_df ):
     time_sorted_topic_df[ 'DeltaTime' ] = topic_delta_time_list
 
 
-# In[11]:
+# In[45]:
 
 
 def Distance( time_sorted_chassis_df ):
@@ -562,7 +562,7 @@ def Distance( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'Distance' ] = chassis_Distance_list
 
 
-# In[ ]:
+# In[46]:
 
 
 def Distance( df ):
@@ -592,7 +592,7 @@ def Distance( df ):
     df[ 'Distance' ] = Distance_col
 
 
-# In[12]:
+# In[47]:
 
 
 def MergeChassisDriveEvent( chassis_df, drive_event_df ):
@@ -633,7 +633,7 @@ def MergeChassisDriveEvent( chassis_df, drive_event_df ):
     chassis_df[ 'DriveEventType' ] = chassis_type_array
 
 
-# In[3]:
+# In[48]:
 
 
 def DistanceToNearestDisengagement( time_sorted_chassis_df ):
@@ -713,7 +713,7 @@ def DistanceToNearestDisengagement( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'NearestDisengagementID' ] = chassis_NearestDisengagementID_list
 
 
-# In[1]:
+# In[49]:
 
 
 def Acceleration_chassistime( time_sorted_chassis_df ):
@@ -738,7 +738,7 @@ def Acceleration_chassistime( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'Acceleration' ] = acceleration_list
 
 
-# In[2]:
+# In[50]:
 
 
 def Acceleration( time_sorted_chassis_df, time_interval = 1 ):
@@ -790,7 +790,7 @@ def Acceleration( time_sorted_chassis_df, time_interval = 1 ):
     time_sorted_chassis_df[ 'Acceleration' ] = acceleration_array
 
 
-# In[ ]:
+# In[51]:
 
 
 def MovingFunction( df, moving_colname, window, operation, desired_colnames ):
@@ -886,7 +886,7 @@ def MovingFunction( df, moving_colname, window, operation, desired_colnames ):
         df[ output_colname ] = output_col
 
 
-# In[7]:
+# In[52]:
 
 
 def MovingFunction_v2( df, moving_colname, window, operation, desired_colnames ):
@@ -996,7 +996,7 @@ def MovingFunction_v2( df, moving_colname, window, operation, desired_colnames )
         df[ output_colname ] = output_col
 
 
-# In[ ]:
+# In[53]:
 
 
 def BinaryDisengagement( df ):
@@ -1018,7 +1018,7 @@ def BinaryDisengagement( df ):
     df[ 'BinaryDisengagement' ] = BinaryDisengagement_col
 
 
-# In[ ]:
+# In[54]:
 
 
 def BinaryDisengagementExpanded( df, moving_colname, window ):
@@ -1070,7 +1070,7 @@ def BinaryDisengagementExpanded( df, moving_colname, window ):
     df[ 'BinaryDisengagementExpanded' ] = BinaryDisengagementExpanded_col
 
 
-# In[ ]:
+# In[55]:
 
 
 def Index( df ):
@@ -1080,55 +1080,83 @@ def Index( df ):
     df[ 'Ind' ] = [ index for index in range( num_of_rows ) ]
 
 
-# In[ ]:
+# In[56]:
 
 
 def DisengagementID( df, expanded = False ):
-
-    '''
-    Needs adjustment for expanded setting, but can still be used.
-    '''
 
     gmID = df[ 'groupMetadataID' ][ 0 ]
     
     #
 
-    if ( expanded == False ):
+    disengagment_col = np.array( df[ 'BinaryDisengagement' ] )
 
-        disengagment_col = np.array( df[ 'BinaryDisengagement' ] )
-
-        string1 = ''
-
-        string2 = ''
-
-    elif ( expanded == True ):
-
-        disengagment_col = np.array( df[ 'BinaryDisengagementExpanded' ] )
-
-        string1 = 'Expanded'
-
-        string2 = 'e'
-
-    #
-
-    disengagement_indexes = np.where( disengagment_col == 1 )[ 0 ]
+    disengagement_indexes = np.array( np.where( disengagment_col == 1 )[ 0 ] )
 
     #
 
     DisengagementID_col = [ 'NAD' for i in disengagment_col ]
 
-    counter = 0
+    #
 
-    for index in disengagement_indexes:
+    if ( expanded == False ):
 
-        DisengagementID_col[ index ] = f'{ gmID }_{ counter }{ string2 }'
+        string = ''
 
-        counter = counter + 1
+        #
+        
+        counter = 0
 
-    df[ f'Disengagement{ string1 }ID' ] = DisengagementID_col
+        for index in disengagement_indexes:
+
+            DisengagementID_col[ int( index ) ] = f'{ gmID }_D{ counter }'
+
+            counter = counter + 1
+
+    elif ( expanded == True ):
+
+        string = 'Expanded'
+
+        #
+
+        expanded_disengagment_col = np.array( df[ 'BinaryDisengagementExpanded' ] )
+
+        expanded_disengagement_indexes = np.where( expanded_disengagment_col == 1 )[ 0 ]
+
+        #
+
+        counter = 0
+
+        for expanded_disengagement_index in expanded_disengagement_indexes:
+
+            temp_array = disengagement_indexes - expanded_disengagement_index
+
+            #
+
+            temp_array2 = disengagement_indexes[ np.where( temp_array >= 0 ) ]
+
+            #
+
+            disengagement_index = int( temp_array2[ 0 ] )
+
+            #
+
+            disengagement_num = int( np.where( disengagement_indexes == disengagement_index )[ 0 ][ 0 ] )
+
+            #
+
+            expanded_disengagement_num = disengagement_index - expanded_disengagement_index
+
+            #
+
+            DisengagementID_col[ expanded_disengagement_index ] = f'{ gmID }_D{ disengagement_num }_ED{ expanded_disengagement_num }'
+
+    #
+
+    df[ f'Disengagement{ string }ID' ] = DisengagementID_col
 
 
-# In[3]:
+# In[57]:
 
 
 def TernaryTurnSignal( chassis_df ):
@@ -1154,7 +1182,7 @@ def TernaryTurnSignal( chassis_df ):
     chassis_df[ 'TernaryTurnSignal' ] = TernaryTurnSignal_col
 
 
-# In[4]:
+# In[58]:
 
 
 def BinaryContainLights( traffic_df ):
@@ -1178,7 +1206,7 @@ def BinaryContainLights( traffic_df ):
 
 # ### Functions unrelated to calculated fields but are important vvv
 
-# In[14]:
+# In[59]:
 
 
 def origin_dir():
@@ -1222,7 +1250,7 @@ def origin_dir():
                 return path
 
 
-# In[15]:
+# In[60]:
 
 
 def retrieve_metadata_df():
@@ -1238,7 +1266,7 @@ def retrieve_metadata_df():
     return metadata_df
 
 
-# In[16]:
+# In[61]:
 
 
 def list_gmIDs():
@@ -1271,7 +1299,7 @@ def list_gmIDs():
     return gmID_list
 
 
-# In[17]:
+# In[62]:
 
 
 def list_topics():
@@ -1308,7 +1336,7 @@ def list_topics():
     return topic_list
 
 
-# In[18]:
+# In[63]:
 
 
 def retrieve_gmID_topic( gmID, topic ):
@@ -1345,7 +1373,19 @@ def retrieve_gmID_topic( gmID, topic ):
     return gmID_topic_df
 
 
-# In[19]:
+# In[64]:
+
+
+def retrieve_gmID_preprocessed_moving_data( gmID, window_seconds ):
+
+    path = f'{ origin_dir() }/Preprocessed_Moving_Data/{ window_seconds }sec_Window/{ gmID }/{ gmID }_{ window_seconds }sec.csv'
+
+    gmID_preprocessed_moving_data_df = pd.read_csv( path )
+
+    return gmID_preprocessed_moving_data_df
+
+
+# In[65]:
 
 
 def give_route( gmID ):
@@ -1393,7 +1433,7 @@ def give_route( gmID ):
         raise Exception( f'{ gmID } is not valid' )
 
 
-# In[20]:
+# In[66]:
 
 
 def list_whitelisted_gmIDs():
@@ -1407,7 +1447,7 @@ def list_whitelisted_gmIDs():
     return list( whitelisted_gmIDs_set )
 
 
-# In[21]:
+# In[67]:
 
 
 def list_blacklisted_gmIDs():
@@ -1421,7 +1461,23 @@ def list_blacklisted_gmIDs():
     return list( blacklisted_gmIDs_set )
 
 
-# In[ ]:
+# In[68]:
+
+
+def list_whitelisted_gmIDs_with_traffic_data():
+
+    whitelisted_gmIDs_list = list_whitelisted_gmIDs()
+
+    whitelisted_gmIDs_without_traffic_data_list = [ '69ab88ec-dc17-11ee-a158-97f8443fd730', 
+                                                    '88a68dd8-eef9-11ee-9385-ef789ffde1d3', 
+                                                    'fc211bb2-efca-11ee-b966-fb353e7798cd' ]
+
+    whitelisted_gmIDs_with_traffic_data = list( set( whitelisted_gmIDs_list ) - set( whitelisted_gmIDs_without_traffic_data_list ) )
+
+    return whitelisted_gmIDs_with_traffic_data
+
+
+# In[69]:
 
 
 def random_list_split( input_list, split_percentage = 0.5 ):
@@ -1439,4 +1495,58 @@ def random_list_split( input_list, split_percentage = 0.5 ):
     split_list2 = input_list[ split_index : ]
 
     return split_list1, split_list2
+
+
+# In[70]:
+
+
+def confusion_matrix_values( prediction_col, true_col ):
+
+    true_positive_num = 0
+
+    true_negative_num = 0
+
+    false_positive_num = 0
+
+    false_negative_num = 0
+
+    for predicted_value, true_value in zip( prediction_col, true_col ):
+
+        if ( ( predicted_value == 0 ) and ( true_value == 0 ) ):
+
+            true_negative_num = true_negative_num + 1
+
+        #
+
+        elif ( ( predicted_value == 1 ) and ( true_value == 1 ) ):
+
+            true_positive_num = true_positive_num + 1
+
+        #
+
+        elif ( ( predicted_value == 0 ) and ( true_value == 1 ) ):
+
+            false_negative_num = false_negative_num + 1
+
+        #
+
+        elif ( ( predicted_value == 1 ) and ( true_value == 0 ) ):
+
+            false_positive_num = false_positive_num + 1
+
+        #
+
+        else:
+
+            raise Exception( 'Non 0 or 1 value present in either column' )
+
+    #
+
+    return true_positive_num, true_negative_num, false_positive_num, false_negative_num
+
+
+# In[ ]:
+
+
+
 
