@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[35]:
+# In[2]:
 
 
 import numpy as np
@@ -10,7 +10,21 @@ import pandas as pd
 
 import random
 
+#
+
 import os
+
+#
+
+from sklearn.tree import DecisionTreeClassifier
+
+from sklearn.model_selection import KFold
+
+from sklearn.metrics import confusion_matrix
+
+#
+
+from bayes_opt import BayesianOptimization
 
 
 # In[36]:
@@ -1497,10 +1511,12 @@ def random_list_split( input_list, split_percentage = 0.5 ):
     return split_list1, split_list2
 
 
-# In[70]:
+# In[1]:
 
 
 def confusion_matrix_values( prediction_col, true_col ):
+
+    # Legacy
 
     true_positive_num = 0
 
@@ -1548,5 +1564,214 @@ def confusion_matrix_values( prediction_col, true_col ):
 # In[ ]:
 
 
+def BinaryClassification_DecisionTree( train_dfs, \
+                                       test_dfs, \
+                                       X_colnames, \
+                                       y_colname, \
+                                       dt_random_state = 0, \
+                                       y_labels = None, \
+                                       **dt_hyperparameters ):
 
+    #
+
+    model = DecisionTreeClassifier( random_state = dt_random_state, **dt_hyperparameters )
+
+    #
+
+    train_df = pd.concat( train_dfs )
+
+    test_df = pd.concat( test_dfs )
+
+    #
+
+    X_train, X_test = train_df[ X_colnames ], test_df[ X_colnames ]
+
+    y_train, y_test = train_df[ y_colname ], test_df[ y_colname ]
+
+    #
+
+    model = model.fit( X_train, y_train )
+
+    #
+
+    y_pred_test = model.predict( X_test )
+
+    #
+
+    tn, fp, fn, tp = confusion_matrix( y_test, y_pred_test, labels = y_labels ).ravel()
+
+    #
+
+    return { 'tn' : tn, 'fp' : fp, 'fn' : fn, 'tp' : tp }
+
+
+# In[ ]:
+
+
+def BinaryClassification_DecisionTree_CV( train_dfs, \
+                                          X_colnames, \
+                                          y_colname, \
+                                          metric_function, \
+                                          dt_random_state = 0, \
+                                          cv_num_of_splits = 10, \
+                                          cv_shuffle = False, \
+                                          cv_random_state = None, \
+                                          y_labels = None, \
+                                          **dt_hyperparameters ):
+
+    #
+
+    train_dfs_indexes = np.array( [ n for n in range( len( train_dfs ) ) ] )
+
+    #
+
+    kfold = KFold( n_splits = cv_num_of_splits, shuffle = cv_shuffle, random_state = cv_random_state )
+
+    #
+
+    validation_test_metric_value_list = []
+
+    for fold in kfold.split( train_dfs_indexes ):
+
+        validation_train_indexes, validation_test_indexes = fold
+
+        #
+
+        validation_train_dfs = [ df for index, df in enumerate( train_dfs ) if index in validation_train_indexes ]
+
+        validation_test_dfs = [ df for index, df in enumerate( train_dfs ) if index in validation_test_indexes ]
+
+        #
+
+        tn, fp, fn, tp = BinaryClassification_DecisionTree( train_dfs = validation_train_dfs, \
+                                                            test_dfs = validation_test_dfs, \
+                                                            X_colnames = X_colnames, \
+                                                            y_colname = y_colname, \
+                                                            dt_random_state = dt_random_state, \
+                                                            y_labels = y_labels, \
+                                                            **dt_hyperparameters ).values()
+
+        #
+
+        validation_test_metric_value = metric_function( tn = tn, fp = fp, fn = fn, tp = tp )
+
+        validation_test_metric_value_list.append( validation_test_metric_value )
+
+    #
+
+    mean_validation_test_metric_value = np.mean( validation_test_metric_value_list )
+
+    #
+
+    return mean_validation_test_metric_value
+
+
+# In[3]:
+
+
+def mf_positive_precision( fp, tp, **kwargs ):
+
+    return tp / ( tp + fp )
+
+def mf_negative_precision( tn, fn, **kwargs ):
+
+    return tn / ( tn + fn )
+
+#
+
+def mf_positive_recall( fn, tp, **kwargs ):
+
+    return tp / ( tp + fn )
+
+def mf_negative_recall( tn, fp, **kwargs ):
+
+    return tn / ( tn + fp )
+
+#
+
+def mf_fbeta_score( tn, fp, fn, tp, beta = 1, **kwargs ):
+
+    # recall is considered 'beta' times as important as precision
+
+    precision = mf_positive_precision( fp, tp )
+
+    recall = mf_positive_recall( fn, tp )
+
+    return ( 1 + beta ** 2 ) * ( precision * recall ) / ( ( ( beta ** 2 ) * precision ) + recall )
+
+#
+
+def mf_accuracy( tn, fp, fn, tp, **kwargs ):
+
+    return ( tp + tn ) / ( tp + tn + fp + fn )
+
+def mf_balanced_accuracy( tn, fp, fn, tp, **kwargs ):
+
+    sensitivity = mf_positive_recall( fn, tp )
+
+    specificity = mf_negative_precision( tn, fn )
+
+    return ( sensitivity + specificity ) / 2
+
+
+# In[ ]:
+
+
+def unique_disengagement_recall( y_true, y_pred, true_DisengagementExpandedID_col ):
+
+    temp_df = pd.DataFrame()
+
+    #
+
+    temp_df[ 'y_pred' ] = list( y_pred ) 
+
+    temp_df[ 'y_true' ] = list( y_true )
+
+    #
+
+    temp_df[ 'DisengagementExpandedID' ] = list( true_DisengagementExpandedID_col )
+
+    #
+
+    temp_df = temp_df[ temp_df[ 'DisengagementExpandedID' ] != 'NAD' ]
+
+    #
+
+    DisengagementID_col = []
+
+    for ExpandedID in temp_df[ 'DisengagementExpandedID' ]:
+
+        index = ExpandedID.index( 'ED' )
+
+        ID = ExpandedID[ : index - 1 ]
+
+        DisengagementID_col.append( ID )
+
+    temp_df[ 'DisengagementID' ] = DisengagementID_col
+
+    #
+
+    unique_DisengagementIDs_wCounts = dict( temp_df[ 'DisengagementID' ].value_counts() )
+
+    num_of_unique_DisengagementIDs = len( unique_DisengagementIDs_wCounts.keys() )
+
+    #
+
+    temp_df = temp_df[ ( temp_df[ 'y_pred'] == 1 ) & ( temp_df[ 'y_true' ] == 1 ) ]
+
+    #
+
+    unique_TP_DisengagementIDs_wCounts = dict( temp_df[ 'DisengagementID' ].value_counts() )
+
+    num_of_unique_TP_DisengagementIDs = len( unique_TP_DisengagementIDs_wCounts.keys() )
+
+    #
+
+    unique_disengagement_recall_ = num_of_unique_TP_DisengagementIDs / num_of_unique_DisengagementIDs
+
+    #
+
+    return { 'unique_disengagement_recall' : unique_disengagement_recall_, \
+             'num_of_unique_tp_DisengagementIDs' : num_of_unique_TP_DisengagementIDs, \
+             'num_of_unique_DisengagementIDs' : num_of_unique_DisengagementIDs }
 
