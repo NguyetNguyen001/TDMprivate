@@ -1,0 +1,158 @@
+Train gmIDs:
+
+'3ec95686-f053-11ee-b988-fb353e7798cd',
+'b31aca98-cb95-11ee-909c-e1dc60cf66f9',
+'25e27b86-f06a-11ee-b9a3-fb353e7798cd',
+'bf9157f0-f16b-11ee-ba9e-fb353e7798cd',
+'51b74168-f19d-11ee-babf-fb353e7798cd',
+'de493be2-f10f-11ee-ba4b-fb353e7798cd',
+'ece2a8be-f047-11ee-b97d-fb353e7798cd',
+'044d976e-f0e5-11ee-ba20-fb353e7798cd',
+'98692fde-f1a4-11ee-bac6-fb353e7798cd',
+'5afabc8c-f035-11ee-b966-fb353e7798cd',
+'072ef896-cbac-11ee-909c-e1dc60cf66f9',
+'c59a54e0-f179-11ee-baab-fb353e7798cd',
+'bbbd0cc6-f0dc-11ee-ba1e-fb353e7798cd',
+'ba87f3ec-f07e-11ee-b9b4-fb353e7798cd',
+'96ceec56-f1cf-11ee-bae4-fb353e7798cd',
+'40706f50-f03b-11ee-b96e-fb353e7798cd',
+'f570c51c-f15d-11ee-ba91-fb353e7798cd',
+'f12112ba-f1c0-11ee-bada-fb353e7798cd',
+'961fd9cc-f103-11ee-ba3f-fb353e7798cd',
+'5f7ce340-f1c8-11ee-bae0-fb353e7798cd',
+'cf7148d8-f058-11ee-b98a-fb353e7798cd',
+'848e44a6-f134-11ee-ba6d-fb353e7798cd',
+'3a7dc9a6-f042-11ee-b974-fb353e7798cd',
+'c9be2042-f0de-11ee-ba1e-fb353e7798cd',
+'9736e77c-f187-11ee-bab6-fb353e7798cd',
+'5fc763f6-f1ab-11ee-bacd-fb353e7798cd',
+'4c88757c-f157-11ee-ba89-fb353e7798cd',
+'a231c0b0-f142-11ee-ba76-fb353e7798cd',
+'53fad09e-f0f7-11ee-ba2f-fb353e7798cd',
+'5c7a9ab2-f13b-11ee-ba72-fb353e7798cd',
+'4cf81634-f238-11ee-bb34-fb353e7798cd',
+'a08a8c7e-f1fb-11ee-bb05-fb353e7798cd',
+'3ed4aa16-f1d6-11ee-bae6-fb353e7798cd',
+'25135418-f250-11ee-bb4a-fb353e7798cd',
+'c1b320e2-f079-11ee-b9b0-fb353e7798cd',
+'43abeb00-f206-11ee-bb07-fb353e7798cd',
+'fe0395f0-f1ea-11ee-baf9-fb353e7798cd',
+'3d8020aa-cb7f-11ee-909c-e1dc60cf66f9',
+'14b6bc9c-f064-11ee-b998-fb353e7798cd',
+'870cfd32-f1b9-11ee-bad5-fb353e7798cd',
+'c2f54552-f06f-11ee-b9a9-fb353e7798cd',
+'dea29156-f123-11ee-ba5d-fb353e7798cd',
+'3c415ade-d353-11ee-b437-336917683bb8',
+'a901fe40-f0fd-11ee-ba39-fb353e7798cd',
+'c4146d46-f074-11ee-b9ac-fb353e7798cd',
+'de226278-f25a-11ee-bb4e-fb353e7798cd',
+'d7cb9c92-f164-11ee-ba97-fb353e7798cd',
+'88b0613a-d35d-11ee-b437-336917683bb8',
+'c4fca7bc-f18e-11ee-bab8-fb353e7798cd',
+'ed352100-cba0-11ee-909c-e1dc60cf66f9',
+'cbdc93f4-f255-11ee-bb4e-fb353e7798cd',
+'8e5c4fc2-f149-11ee-ba7f-fb353e7798cd',
+'bb4d37d4-f109-11ee-ba46-fb353e7798cd',
+'236836f6-f1dd-11ee-bae8-fb353e7798cd',
+'7948628e-f20b-11ee-bb0f-fb353e7798cd',
+'c14299be-f180-11ee-bab0-fb353e7798cd',
+'73bc30cc-f150-11ee-ba84-fb353e7798cd',
+'7e3d64da-f12d-11ee-ba68-fb353e7798cd',
+'837fc882-cb5a-11ee-909c-e1dc60cf66f9',
+'f8fd0fd8-f243-11ee-bb3f-fb353e7798cd',
+'58d78342-f24a-11ee-bb45-fb353e7798cd',
+'8adb6498-f04d-11ee-b981-fb353e7798cd',
+'271fee10-cb8b-11ee-909c-e1dc60cf66f9',
+'99b9f446-f1b2-11ee-bad3-fb353e7798cd'
+
+Test gmIDs:
+
+'e9a1d768-f23d-11ee-bb39-fb353e7798cd',
+'7a22a34c-f1f0-11ee-bafe-fb353e7798cd',
+'0f3cdf60-f1f6-11ee-bb00-fb353e7798cd',
+'25641404-cb66-11ee-909c-e1dc60cf66f9',
+'a6539bd2-cb72-11ee-909c-e1dc60cf66f9',
+'1c74d294-f1e4-11ee-baf0-fb353e7798cd',
+'7f824ea2-f05e-11ee-b993-fb353e7798cd',
+'d454c586-f11c-11ee-ba55-fb353e7798cd',
+'5774dcde-f196-11ee-babe-fb353e7798cd',
+'f9c5e53e-f0ea-11ee-ba28-fb353e7798cd',
+'9df14b4e-f172-11ee-baa6-fb353e7798cd',
+'fa9cba86-f0f0-11ee-ba2a-fb353e7798cd',
+'d1a3a310-f091-11ee-b9ce-fb353e7798cd',
+'d846a080-f115-11ee-ba51-fb353e7798cd',
+'8b0593cc-cb4e-11ee-909c-e1dc60cf66f9',
+'b3ee0dd8-f0d7-11ee-ba18-fb353e7798cd',
+'df6c3fb4-f200-11ee-bb07-fb353e7798cd'
+
+#
+
+X_colnames = [ 'speedMps', 'brakePercentage', 'throttlePercentage', 'steeringPercentage', 'LatLonTotalStdDev' ]
+
+y_colname = 'BinaryDisengagementExpanded'
+
+#
+
+Metric Maximized: F2_Score
+
+#
+
+Hyperparameter Tuning Method: Bayesian Optimization
+
+#
+
+Hyperparameters Tuned w/ Optimal Values: 
+
+min_samples_split = 100
+
+min_samples_leaf = 48
+
+-> Best F2_Score: 0.12563777845324633
+
+#
+
+Extra Details:
+
+5 fold cross validation done on training data
+
+Bayesian Optimization had: n_iter = 25, init_points = 25
+
+#
+
+Train on Training Data, Test on Training Data Results:
+
+True_Positives: 2918, False_Positives: 1427
+False_Negatives: 6166, True_Negatives: 1712313
+
+Positive_Precision: 0.672
+
+Positive_Recall: 0.321
+
+F2_Score: 0.359
+
+Accuracy: 0.996
+Balanced_Accuracy: 0.659
+
+unique_disengagement_recall: 0.532
+num_of_unique_tp_DisengagementIDs: 150
+num_of_unique_DisengagementIDs: 282
+
+#
+
+Train on Training Data, Test on Testing Data Results:
+
+True_Positives: 199, False_Positives: 1113
+False_Negatives: 2963, True_Negatives: 450294
+
+Positive_Precision: 0.152
+
+Positive_Recall: 0.063
+
+F2_Score: 0.071
+
+Accuracy: 0.991
+Balanced_Accuracy: 0.528
+
+unique_disengagement_recall: 0.198
+num_of_unique_tp_DisengagementIDs: 18
+num_of_unique_DisengagementIDs: 91

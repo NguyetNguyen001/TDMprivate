@@ -4,27 +4,27 @@
 # In[2]:
 
 
-import numpy as np
+# import numpy as np
 
-import pandas as pd
+# import pandas as pd
 
-import random
-
-#
-
-import os
+# import random
 
 #
 
-from sklearn.tree import DecisionTreeClassifier
-
-from sklearn.model_selection import KFold
-
-from sklearn.metrics import confusion_matrix
+# import os
 
 #
 
-from bayes_opt import BayesianOptimization
+# from sklearn.tree import DecisionTreeClassifier
+
+# from sklearn.model_selection import KFold
+
+# from sklearn.metrics import confusion_matrix
+
+#
+
+# from bayes_opt import BayesianOptimization
 
 
 # In[36]:
@@ -1561,7 +1561,7 @@ def confusion_matrix_values( prediction_col, true_col ):
     return true_positive_num, true_negative_num, false_positive_num, false_negative_num
 
 
-# In[ ]:
+# In[13]:
 
 
 def BinaryClassification_DecisionTree( train_dfs, \
@@ -1602,10 +1602,10 @@ def BinaryClassification_DecisionTree( train_dfs, \
 
     #
 
-    return { 'tn' : tn, 'fp' : fp, 'fn' : fn, 'tp' : tp }
+    return { 'tn' : tn, 'fp' : fp, 'fn' : fn, 'tp' : tp }, model, y_test, y_pred_test
 
 
-# In[ ]:
+# In[14]:
 
 
 def BinaryClassification_DecisionTree_CV( train_dfs, \
@@ -1643,13 +1643,15 @@ def BinaryClassification_DecisionTree_CV( train_dfs, \
 
         #
 
-        tn, fp, fn, tp = BinaryClassification_DecisionTree( train_dfs = validation_train_dfs, \
-                                                            test_dfs = validation_test_dfs, \
-                                                            X_colnames = X_colnames, \
-                                                            y_colname = y_colname, \
-                                                            dt_random_state = dt_random_state, \
-                                                            y_labels = y_labels, \
-                                                            **dt_hyperparameters ).values()
+        cm_values, _, _, _ = BinaryClassification_DecisionTree( train_dfs = validation_train_dfs, \
+                                                                test_dfs = validation_test_dfs, \
+                                                                X_colnames = X_colnames, \
+                                                                y_colname = y_colname, \
+                                                                dt_random_state = dt_random_state, \
+                                                                y_labels = y_labels, \
+                                                                **dt_hyperparameters )
+
+        tn, fp, fn, tp = cm_values.values()
 
         #
 
@@ -1666,7 +1668,7 @@ def BinaryClassification_DecisionTree_CV( train_dfs, \
     return mean_validation_test_metric_value
 
 
-# In[3]:
+# In[15]:
 
 
 def mf_positive_precision( fp, tp, **kwargs ):
@@ -1714,7 +1716,53 @@ def mf_balanced_accuracy( tn, fp, fn, tp, **kwargs ):
     return ( sensitivity + specificity ) / 2
 
 
-# In[ ]:
+# In[1]:
+
+
+def ML_metrics( tn, fp, fn, tp, beta, display = False ):
+
+    #
+
+    pprecision = mf_positive_precision( tn = tn, fp = fp, fn = fn, tp = tp )
+
+    #
+
+    precall = mf_positive_recall( tn = tn, fp = fp, fn = fn, tp = tp )
+
+    nrecall = mf_negative_recall( tn = tn, fp = fp, fn = fn, tp = tp )
+
+    #
+
+    fbeta_score = mf_fbeta_score( tn = tn, fp = fp, fn = fn, tp = tp, beta = beta )
+
+    #
+
+    accuracy = mf_accuracy( tn = tn, fp = fp, fn = fn, tp = tp )
+
+    baccuracy = mf_balanced_accuracy( tn = tn, fp = fp, fn = fn, tp = tp )
+
+    #
+
+    if ( display == True ):
+
+        print( f'True_Positives: { tp }, False_Positives: { fp }' )
+
+        print( f'False_Negatives: { fn }, True_Negatives: { tn }\n' )
+
+        print( f'Positive_Precision: { pprecision:.3f}\n' )
+
+        print( f'Positive_Recall: { precall:.3f}\n' )
+
+        print( f'F{ beta }_Score: { fbeta_score:.3f}\n' )
+
+        print( f'Accuracy: { accuracy:.3f}' )
+
+        print( f'Balanced_Accuracy: { baccuracy:.3f}' )
+
+    return tn, fp, fn, tp, pprecision, precall, nrecall, fbeta_score, accuracy, baccuracy
+
+
+# In[2]:
 
 
 def unique_disengagement_recall( y_true, y_pred, true_DisengagementExpandedID_col ):
@@ -1774,4 +1822,10 @@ def unique_disengagement_recall( y_true, y_pred, true_DisengagementExpandedID_co
     return { 'unique_disengagement_recall' : unique_disengagement_recall_, \
              'num_of_unique_tp_DisengagementIDs' : num_of_unique_TP_DisengagementIDs, \
              'num_of_unique_DisengagementIDs' : num_of_unique_DisengagementIDs }
+
+
+# In[ ]:
+
+
+
 
