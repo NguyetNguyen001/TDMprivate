@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 
-# import numpy as np
+import numpy as np
 
-# import pandas as pd
+import pandas as pd
 
-# import random
+import random
 
 #
 
-# import os
+import os
 
 #
 
