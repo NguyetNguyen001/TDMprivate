@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[35]:
+# In[41]:
 
 
 import numpy as np
@@ -10,10 +10,24 @@ import pandas as pd
 
 import random
 
+#
+
 import os
 
+#
 
-# In[36]:
+# from sklearn.tree import DecisionTreeClassifier
+
+# from sklearn.model_selection import KFold
+
+# from sklearn.metrics import confusion_matrix
+
+#
+
+# from bayes_opt import BayesianOptimization
+
+
+# In[42]:
 
 
 def BinaryDrivingMode( chassis_df ):
@@ -61,7 +75,7 @@ def BinaryDrivingMode( chassis_df ):
     chassis_df[ 'BinaryDrivingMode' ] = binary_drive_mode_lst
 
 
-# In[37]:
+# In[43]:
 
 
 def TernaryDrivingModeTransition( time_sorted_chassis_df ):
@@ -108,7 +122,7 @@ def TernaryDrivingModeTransition( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'TernaryDrivingModeTransition' ] = ternary_drive_mode_trans_lst
 
 
-# In[38]:
+# In[44]:
 
 
 def LatLonTotalStdDev( best_pose_df ):
@@ -154,7 +168,7 @@ def LatLonTotalStdDev( best_pose_df ):
     best_pose_df[ 'LatLonTotalStdDev' ] = latlon_total_stddev_lst
 
 
-# In[39]:
+# In[45]:
 
 
 def ChassisBestPoseMatchedTime( same_gmID_chassis_df, same_gmID_best_pose_df ):
@@ -229,7 +243,7 @@ def ChassisBestPoseMatchedTime( same_gmID_chassis_df, same_gmID_best_pose_df ):
     same_gmID_best_pose_df[ 'ChassisBestPoseMatchedTime' ] = same_gmID_best_pose_df[ 'time' ]
 
 
-# In[40]:
+# In[46]:
 
 
 def ProgressAlongRoute( best_pose_df, time_sorted_reference_best_pose_df):
@@ -273,7 +287,7 @@ def ProgressAlongRoute( best_pose_df, time_sorted_reference_best_pose_df):
     best_pose_df[ 'ProgressAlongRoute' ] = current_ProgressAlongRoute_list
 
 
-# In[41]:
+# In[47]:
 
 
 def ProgressAlongRoute_v2( time_sorted_best_pose_df, time_sorted_reference_best_pose_df = 'auto', num_of_partitions = 100, \
@@ -441,7 +455,7 @@ def ProgressAlongRoute_v2( time_sorted_best_pose_df, time_sorted_reference_best_
         return False
 
 
-# In[42]:
+# In[48]:
 
 
 def ZeroedTime( topic_df ):
@@ -482,7 +496,7 @@ def ZeroedTime( topic_df ):
     topic_df[ 'ZeroedTime' ] = list( zeroed_topic_time_array )
 
 
-# In[43]:
+# In[49]:
 
 
 def NormalizedTime( topic_df ):
@@ -496,7 +510,7 @@ def NormalizedTime( topic_df ):
     topic_df[ 'NormalizedTime' ] = normalized_topic_time_array
 
 
-# In[44]:
+# In[50]:
 
 
 def DeltaTime( time_sorted_topic_df ):
@@ -538,7 +552,7 @@ def DeltaTime( time_sorted_topic_df ):
     time_sorted_topic_df[ 'DeltaTime' ] = topic_delta_time_list
 
 
-# In[45]:
+# In[51]:
 
 
 def Distance( time_sorted_chassis_df ):
@@ -562,7 +576,7 @@ def Distance( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'Distance' ] = chassis_Distance_list
 
 
-# In[46]:
+# In[52]:
 
 
 def Distance( df ):
@@ -592,7 +606,7 @@ def Distance( df ):
     df[ 'Distance' ] = Distance_col
 
 
-# In[47]:
+# In[53]:
 
 
 def MergeChassisDriveEvent( chassis_df, drive_event_df ):
@@ -633,7 +647,7 @@ def MergeChassisDriveEvent( chassis_df, drive_event_df ):
     chassis_df[ 'DriveEventType' ] = chassis_type_array
 
 
-# In[48]:
+# In[54]:
 
 
 def DistanceToNearestDisengagement( time_sorted_chassis_df ):
@@ -713,7 +727,7 @@ def DistanceToNearestDisengagement( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'NearestDisengagementID' ] = chassis_NearestDisengagementID_list
 
 
-# In[49]:
+# In[55]:
 
 
 def Acceleration_chassistime( time_sorted_chassis_df ):
@@ -738,7 +752,7 @@ def Acceleration_chassistime( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'Acceleration' ] = acceleration_list
 
 
-# In[50]:
+# In[56]:
 
 
 def Acceleration( time_sorted_chassis_df, time_interval = 1 ):
@@ -790,7 +804,7 @@ def Acceleration( time_sorted_chassis_df, time_interval = 1 ):
     time_sorted_chassis_df[ 'Acceleration' ] = acceleration_array
 
 
-# In[51]:
+# In[57]:
 
 
 def MovingFunction( df, moving_colname, window, operation, desired_colnames ):
@@ -886,7 +900,7 @@ def MovingFunction( df, moving_colname, window, operation, desired_colnames ):
         df[ output_colname ] = output_col
 
 
-# In[52]:
+# In[58]:
 
 
 def MovingFunction_v2( df, moving_colname, window, operation, desired_colnames ):
@@ -996,7 +1010,7 @@ def MovingFunction_v2( df, moving_colname, window, operation, desired_colnames )
         df[ output_colname ] = output_col
 
 
-# In[53]:
+# In[59]:
 
 
 def BinaryDisengagement( df ):
@@ -1018,7 +1032,7 @@ def BinaryDisengagement( df ):
     df[ 'BinaryDisengagement' ] = BinaryDisengagement_col
 
 
-# In[54]:
+# In[60]:
 
 
 def BinaryDisengagementExpanded( df, moving_colname, window ):
@@ -1070,7 +1084,7 @@ def BinaryDisengagementExpanded( df, moving_colname, window ):
     df[ 'BinaryDisengagementExpanded' ] = BinaryDisengagementExpanded_col
 
 
-# In[55]:
+# In[61]:
 
 
 def Index( df ):
@@ -1080,7 +1094,7 @@ def Index( df ):
     df[ 'Ind' ] = [ index for index in range( num_of_rows ) ]
 
 
-# In[56]:
+# In[62]:
 
 
 def DisengagementID( df, expanded = False ):
@@ -1156,7 +1170,7 @@ def DisengagementID( df, expanded = False ):
     df[ f'Disengagement{ string }ID' ] = DisengagementID_col
 
 
-# In[57]:
+# In[63]:
 
 
 def TernaryTurnSignal( chassis_df ):
@@ -1182,7 +1196,7 @@ def TernaryTurnSignal( chassis_df ):
     chassis_df[ 'TernaryTurnSignal' ] = TernaryTurnSignal_col
 
 
-# In[58]:
+# In[64]:
 
 
 def BinaryContainLights( traffic_df ):
@@ -1206,7 +1220,7 @@ def BinaryContainLights( traffic_df ):
 
 # ### Functions unrelated to calculated fields but are important vvv
 
-# In[59]:
+# In[65]:
 
 
 def origin_dir():
@@ -1250,7 +1264,7 @@ def origin_dir():
                 return path
 
 
-# In[60]:
+# In[66]:
 
 
 def retrieve_metadata_df():
@@ -1266,7 +1280,7 @@ def retrieve_metadata_df():
     return metadata_df
 
 
-# In[61]:
+# In[67]:
 
 
 def list_gmIDs():
@@ -1299,7 +1313,7 @@ def list_gmIDs():
     return gmID_list
 
 
-# In[62]:
+# In[68]:
 
 
 def list_topics():
@@ -1336,7 +1350,7 @@ def list_topics():
     return topic_list
 
 
-# In[63]:
+# In[69]:
 
 
 def retrieve_gmID_topic( gmID, topic ):
@@ -1373,7 +1387,7 @@ def retrieve_gmID_topic( gmID, topic ):
     return gmID_topic_df
 
 
-# In[64]:
+# In[70]:
 
 
 def retrieve_gmID_preprocessed_moving_data( gmID, window_seconds ):
@@ -1385,7 +1399,19 @@ def retrieve_gmID_preprocessed_moving_data( gmID, window_seconds ):
     return gmID_preprocessed_moving_data_df
 
 
-# In[65]:
+# In[82]:
+
+
+def retrieve_gmID_preprocessed_moving_data_v2( gmID, moving_window ): # moving_window -> sec
+
+    path = f'{ origin_dir() }/Preprocessed_Moving_Data_v2/{ moving_window }sec_moving_window/{ gmID }/{ gmID }.csv'
+
+    gmID_preprocessed_moving_data_df = pd.read_csv( path )
+
+    return gmID_preprocessed_moving_data_df
+
+
+# In[71]:
 
 
 def give_route( gmID ):
@@ -1433,7 +1459,7 @@ def give_route( gmID ):
         raise Exception( f'{ gmID } is not valid' )
 
 
-# In[66]:
+# In[72]:
 
 
 def list_whitelisted_gmIDs():
@@ -1447,7 +1473,7 @@ def list_whitelisted_gmIDs():
     return list( whitelisted_gmIDs_set )
 
 
-# In[67]:
+# In[73]:
 
 
 def list_blacklisted_gmIDs():
@@ -1461,7 +1487,7 @@ def list_blacklisted_gmIDs():
     return list( blacklisted_gmIDs_set )
 
 
-# In[68]:
+# In[74]:
 
 
 def list_whitelisted_gmIDs_with_traffic_data():
@@ -1477,7 +1503,7 @@ def list_whitelisted_gmIDs_with_traffic_data():
     return whitelisted_gmIDs_with_traffic_data
 
 
-# In[69]:
+# In[75]:
 
 
 def random_list_split( input_list, split_percentage = 0.5 ):
@@ -1497,10 +1523,12 @@ def random_list_split( input_list, split_percentage = 0.5 ):
     return split_list1, split_list2
 
 
-# In[70]:
+# In[76]:
 
 
 def confusion_matrix_values( prediction_col, true_col ):
+
+    # Legacy
 
     true_positive_num = 0
 
@@ -1543,6 +1571,281 @@ def confusion_matrix_values( prediction_col, true_col ):
     #
 
     return true_positive_num, true_negative_num, false_positive_num, false_negative_num
+
+
+# In[77]:
+
+
+def BinaryClassification_DecisionTree( train_dfs, \
+                                       test_dfs, \
+                                       X_colnames, \
+                                       y_colname, \
+                                       dt_random_state = 0, \
+                                       y_labels = None, \
+                                       **dt_hyperparameters ):
+
+    #
+
+    model = DecisionTreeClassifier( random_state = dt_random_state, **dt_hyperparameters )
+
+    #
+
+    train_df = pd.concat( train_dfs )
+
+    test_df = pd.concat( test_dfs )
+
+    #
+
+    X_train, X_test = train_df[ X_colnames ], test_df[ X_colnames ]
+
+    y_train, y_test = train_df[ y_colname ], test_df[ y_colname ]
+
+    #
+
+    model = model.fit( X_train, y_train )
+
+    #
+
+    y_pred_test = model.predict( X_test )
+
+    #
+
+    tn, fp, fn, tp = confusion_matrix( y_test, y_pred_test, labels = y_labels ).ravel()
+
+    #
+
+    return { 'tn' : tn, 'fp' : fp, 'fn' : fn, 'tp' : tp }, model, y_test, y_pred_test
+
+
+# In[78]:
+
+
+def BinaryClassification_DecisionTree_CV( train_dfs, \
+                                          X_colnames, \
+                                          y_colname, \
+                                          metric_function, \
+                                          dt_random_state = 0, \
+                                          cv_num_of_splits = 10, \
+                                          cv_shuffle = False, \
+                                          cv_random_state = None, \
+                                          y_labels = None, \
+                                          **dt_hyperparameters ):
+
+    #
+
+    train_dfs_indexes = np.array( [ n for n in range( len( train_dfs ) ) ] )
+
+    #
+
+    kfold = KFold( n_splits = cv_num_of_splits, shuffle = cv_shuffle, random_state = cv_random_state )
+
+    #
+
+    validation_test_metric_value_list = []
+
+    for fold in kfold.split( train_dfs_indexes ):
+
+        validation_train_indexes, validation_test_indexes = fold
+
+        #
+
+        validation_train_dfs = [ df for index, df in enumerate( train_dfs ) if index in validation_train_indexes ]
+
+        validation_test_dfs = [ df for index, df in enumerate( train_dfs ) if index in validation_test_indexes ]
+
+        #
+
+        cm_values, _, _, _ = BinaryClassification_DecisionTree( train_dfs = validation_train_dfs, \
+                                                                test_dfs = validation_test_dfs, \
+                                                                X_colnames = X_colnames, \
+                                                                y_colname = y_colname, \
+                                                                dt_random_state = dt_random_state, \
+                                                                y_labels = y_labels, \
+                                                                **dt_hyperparameters )
+
+        tn, fp, fn, tp = cm_values.values()
+
+        #
+
+        validation_test_metric_value = metric_function( tn = tn, fp = fp, fn = fn, tp = tp )
+
+        validation_test_metric_value_list.append( validation_test_metric_value )
+
+    #
+
+    mean_validation_test_metric_value = np.mean( validation_test_metric_value_list )
+
+    #
+
+    return mean_validation_test_metric_value
+
+
+# In[79]:
+
+
+def mf_positive_precision( fp, tp, **kwargs ):
+
+    return tp / ( tp + fp )
+
+def mf_negative_precision( tn, fn, **kwargs ):
+
+    return tn / ( tn + fn )
+
+#
+
+def mf_positive_recall( fn, tp, **kwargs ):
+
+    return tp / ( tp + fn )
+
+def mf_negative_recall( tn, fp, **kwargs ):
+
+    return tn / ( tn + fp )
+
+#
+
+# def mf_fbeta_score( tn, fp, fn, tp, beta = 1, **kwargs ):
+
+#    # recall is considered 'beta' times as important as precision
+
+#    precision = mf_positive_precision( fp, tp )
+
+#    recall = mf_positive_recall( fn, tp )
+
+#    return ( 1 + beta ** 2 ) * ( precision * recall ) / ( ( ( beta ** 2 ) * precision ) + recall )
+
+def mf_fbeta_score( tn, fp, fn, tp, beta = 1, **kwargs ):
+
+    # recall is considered 'beta' times as important as precision
+
+    return ( 1 + beta ** 2 ) * tp / ( ( 1 + beta ** 2 ) * tp + ( beta ** 2 ) * fn + fp )
+
+#
+
+def mf_accuracy( tn, fp, fn, tp, **kwargs ):
+
+    return ( tp + tn ) / ( tp + tn + fp + fn )
+
+def mf_balanced_accuracy( tn, fp, fn, tp, **kwargs ):
+
+    sensitivity = mf_positive_recall( fn, tp )
+
+    specificity = mf_negative_precision( tn, fn )
+
+    return ( sensitivity + specificity ) / 2
+
+
+# In[80]:
+
+
+def ML_metrics( tn, fp, fn, tp, beta, display = False ):
+
+    #
+
+    pprecision = mf_positive_precision( tn = tn, fp = fp, fn = fn, tp = tp )
+
+    #
+
+    precall = mf_positive_recall( tn = tn, fp = fp, fn = fn, tp = tp )
+
+    nrecall = mf_negative_recall( tn = tn, fp = fp, fn = fn, tp = tp )
+
+    #
+
+    fbeta_score = mf_fbeta_score( tn = tn, fp = fp, fn = fn, tp = tp, beta = beta )
+
+    #
+
+    accuracy = mf_accuracy( tn = tn, fp = fp, fn = fn, tp = tp )
+
+    baccuracy = mf_balanced_accuracy( tn = tn, fp = fp, fn = fn, tp = tp )
+
+    #
+
+    if ( display == True ):
+
+        print( f'True_Positives: { tp }, False_Positives: { fp }' )
+
+        print( f'False_Negatives: { fn }, True_Negatives: { tn }\n' )
+
+        print( f'Positive_Precision: { pprecision:.3f}\n' )
+
+        print( f'Positive_Recall: { precall:.3f}\n' )
+
+        print( f'F{ beta }_Score: { fbeta_score:.3f}\n' )
+
+        print( f'Accuracy: { accuracy:.3f}' )
+
+        print( f'Balanced_Accuracy: { baccuracy:.3f}' )
+
+    return tn, fp, fn, tp, pprecision, precall, nrecall, fbeta_score, accuracy, baccuracy
+
+
+# In[81]:
+
+
+def unique_disengagement_recall( y_true, y_pred, true_DisengagementExpandedID_col ):
+
+    temp_df = pd.DataFrame()
+
+    #
+
+    temp_df[ 'y_pred' ] = list( y_pred ) 
+
+    temp_df[ 'y_true' ] = list( y_true )
+
+    #
+
+    temp_df[ 'DisengagementExpandedID' ] = list( true_DisengagementExpandedID_col )
+
+    #
+
+    temp_df = temp_df[ temp_df[ 'DisengagementExpandedID' ] != 'NAD' ]
+
+    #
+
+    DisengagementID_col = []
+
+    for ExpandedID in temp_df[ 'DisengagementExpandedID' ]:
+
+        index = ExpandedID.index( 'ED' )
+
+        ID = ExpandedID[ : index - 1 ]
+
+        DisengagementID_col.append( ID )
+
+    temp_df[ 'DisengagementID' ] = DisengagementID_col
+
+    #
+
+    unique_DisengagementIDs_wCounts = dict( temp_df[ 'DisengagementID' ].value_counts() )
+
+    num_of_unique_DisengagementIDs = len( unique_DisengagementIDs_wCounts.keys() )
+
+    #
+
+    temp_df = temp_df[ ( temp_df[ 'y_pred'] == 1 ) & ( temp_df[ 'y_true' ] == 1 ) ]
+
+    #
+
+    unique_TP_DisengagementIDs_wCounts = dict( temp_df[ 'DisengagementID' ].value_counts() )
+
+    num_of_unique_TP_DisengagementIDs = len( unique_TP_DisengagementIDs_wCounts.keys() )
+
+    #
+
+    unique_disengagement_recall_ = num_of_unique_TP_DisengagementIDs / num_of_unique_DisengagementIDs
+
+    #
+
+    return { 'unique_disengagement_recall' : unique_disengagement_recall_, \
+             'num_of_unique_tp_DisengagementIDs' : num_of_unique_TP_DisengagementIDs, \
+             'num_of_unique_DisengagementIDs' : num_of_unique_DisengagementIDs }
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
