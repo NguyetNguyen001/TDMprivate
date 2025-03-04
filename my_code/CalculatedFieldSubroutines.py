@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[41]:
+# In[49]:
 
 
 import numpy as np
@@ -27,7 +27,7 @@ import os
 # from bayes_opt import BayesianOptimization
 
 
-# In[42]:
+# In[2]:
 
 
 def BinaryDrivingMode( chassis_df ):
@@ -75,7 +75,7 @@ def BinaryDrivingMode( chassis_df ):
     chassis_df[ 'BinaryDrivingMode' ] = binary_drive_mode_lst
 
 
-# In[43]:
+# In[3]:
 
 
 def TernaryDrivingModeTransition( time_sorted_chassis_df ):
@@ -122,7 +122,7 @@ def TernaryDrivingModeTransition( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'TernaryDrivingModeTransition' ] = ternary_drive_mode_trans_lst
 
 
-# In[44]:
+# In[4]:
 
 
 def LatLonTotalStdDev( best_pose_df ):
@@ -168,7 +168,7 @@ def LatLonTotalStdDev( best_pose_df ):
     best_pose_df[ 'LatLonTotalStdDev' ] = latlon_total_stddev_lst
 
 
-# In[45]:
+# In[5]:
 
 
 def ChassisBestPoseMatchedTime( same_gmID_chassis_df, same_gmID_best_pose_df ):
@@ -243,7 +243,7 @@ def ChassisBestPoseMatchedTime( same_gmID_chassis_df, same_gmID_best_pose_df ):
     same_gmID_best_pose_df[ 'ChassisBestPoseMatchedTime' ] = same_gmID_best_pose_df[ 'time' ]
 
 
-# In[46]:
+# In[6]:
 
 
 def ProgressAlongRoute( best_pose_df, time_sorted_reference_best_pose_df):
@@ -287,7 +287,7 @@ def ProgressAlongRoute( best_pose_df, time_sorted_reference_best_pose_df):
     best_pose_df[ 'ProgressAlongRoute' ] = current_ProgressAlongRoute_list
 
 
-# In[47]:
+# In[7]:
 
 
 def ProgressAlongRoute_v2( time_sorted_best_pose_df, time_sorted_reference_best_pose_df = 'auto', num_of_partitions = 100, \
@@ -455,7 +455,7 @@ def ProgressAlongRoute_v2( time_sorted_best_pose_df, time_sorted_reference_best_
         return False
 
 
-# In[48]:
+# In[8]:
 
 
 def ZeroedTime( topic_df ):
@@ -496,7 +496,7 @@ def ZeroedTime( topic_df ):
     topic_df[ 'ZeroedTime' ] = list( zeroed_topic_time_array )
 
 
-# In[49]:
+# In[9]:
 
 
 def NormalizedTime( topic_df ):
@@ -510,7 +510,7 @@ def NormalizedTime( topic_df ):
     topic_df[ 'NormalizedTime' ] = normalized_topic_time_array
 
 
-# In[50]:
+# In[10]:
 
 
 def DeltaTime( time_sorted_topic_df ):
@@ -552,7 +552,7 @@ def DeltaTime( time_sorted_topic_df ):
     time_sorted_topic_df[ 'DeltaTime' ] = topic_delta_time_list
 
 
-# In[51]:
+# In[11]:
 
 
 def Distance( time_sorted_chassis_df ):
@@ -576,7 +576,7 @@ def Distance( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'Distance' ] = chassis_Distance_list
 
 
-# In[52]:
+# In[12]:
 
 
 def Distance( df ):
@@ -606,7 +606,7 @@ def Distance( df ):
     df[ 'Distance' ] = Distance_col
 
 
-# In[53]:
+# In[13]:
 
 
 def MergeChassisDriveEvent( chassis_df, drive_event_df ):
@@ -647,7 +647,7 @@ def MergeChassisDriveEvent( chassis_df, drive_event_df ):
     chassis_df[ 'DriveEventType' ] = chassis_type_array
 
 
-# In[54]:
+# In[14]:
 
 
 def DistanceToNearestDisengagement( time_sorted_chassis_df ):
@@ -727,7 +727,7 @@ def DistanceToNearestDisengagement( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'NearestDisengagementID' ] = chassis_NearestDisengagementID_list
 
 
-# In[55]:
+# In[15]:
 
 
 def Acceleration_chassistime( time_sorted_chassis_df ):
@@ -752,7 +752,7 @@ def Acceleration_chassistime( time_sorted_chassis_df ):
     time_sorted_chassis_df[ 'Acceleration' ] = acceleration_list
 
 
-# In[56]:
+# In[16]:
 
 
 def Acceleration( time_sorted_chassis_df, time_interval = 1 ):
@@ -804,7 +804,7 @@ def Acceleration( time_sorted_chassis_df, time_interval = 1 ):
     time_sorted_chassis_df[ 'Acceleration' ] = acceleration_array
 
 
-# In[57]:
+# In[17]:
 
 
 def MovingFunction( df, moving_colname, window, operation, desired_colnames ):
@@ -900,7 +900,7 @@ def MovingFunction( df, moving_colname, window, operation, desired_colnames ):
         df[ output_colname ] = output_col
 
 
-# In[58]:
+# In[18]:
 
 
 def MovingFunction_v2( df, moving_colname, window, operation, desired_colnames ):
@@ -1010,7 +1010,51 @@ def MovingFunction_v2( df, moving_colname, window, operation, desired_colnames )
         df[ output_colname ] = output_col
 
 
-# In[59]:
+# In[19]:
+
+
+def GeneralizedMovingFunction( df, moving_colname, relative_moving_window_interval, function_desired_colnames, function_suffixes ):
+
+    # df needs to be sorted by 'moving_colname'
+
+    moving_col_array = np.array( df[ moving_colname ] )
+
+    #
+
+    moving_window_indexes_list = moving_window_indexer( moving_col_array = moving_col_array, 
+                                                        relative_moving_window_interval = relative_moving_window_interval, 
+                                                        handle_empty_indexes = True )
+
+    #
+
+    functions = function_desired_colnames.keys()
+
+    for function in functions:
+
+        #
+
+        desired_colnames = function_desired_colnames[ function ]
+
+        for desired_colname in desired_colnames:
+
+            #
+
+            desired_col_array = np.array( df[ desired_colname ] )
+
+            #
+
+            moving_desired_col_array = moving_window_indexes_applier( col_to_apply_array = desired_col_array, 
+                                                                      moving_window_indexes_list = moving_window_indexes_list, 
+                                                                      function = function )
+
+            #
+
+            suffix = function_suffixes[ function ]
+
+            df[ f'{ desired_colname }_{ suffix }' ] = moving_desired_col_array
+
+
+# In[20]:
 
 
 def BinaryDisengagement( df ):
@@ -1032,7 +1076,7 @@ def BinaryDisengagement( df ):
     df[ 'BinaryDisengagement' ] = BinaryDisengagement_col
 
 
-# In[60]:
+# In[21]:
 
 
 def BinaryDisengagementExpanded( df, moving_colname, window ):
@@ -1084,7 +1128,7 @@ def BinaryDisengagementExpanded( df, moving_colname, window ):
     df[ 'BinaryDisengagementExpanded' ] = BinaryDisengagementExpanded_col
 
 
-# In[61]:
+# In[22]:
 
 
 def Index( df ):
@@ -1094,7 +1138,7 @@ def Index( df ):
     df[ 'Ind' ] = [ index for index in range( num_of_rows ) ]
 
 
-# In[62]:
+# In[23]:
 
 
 def DisengagementID( df, expanded = False ):
@@ -1170,7 +1214,7 @@ def DisengagementID( df, expanded = False ):
     df[ f'Disengagement{ string }ID' ] = DisengagementID_col
 
 
-# In[63]:
+# In[24]:
 
 
 def TernaryTurnSignal( chassis_df ):
@@ -1196,7 +1240,7 @@ def TernaryTurnSignal( chassis_df ):
     chassis_df[ 'TernaryTurnSignal' ] = TernaryTurnSignal_col
 
 
-# In[64]:
+# In[25]:
 
 
 def BinaryContainLights( traffic_df ):
@@ -1218,9 +1262,37 @@ def BinaryContainLights( traffic_df ):
     traffic_df[ 'BinaryContainLights' ] = BinaryContainLights_col
 
 
+# In[1]:
+
+
+def OneHotEncoder( df, colname_to_encode, unique_values = [] ):
+
+    col_to_encode = np.array( df[ colname_to_encode ] )
+
+    #
+
+    if not unique_values:
+
+        unique_values = np.unique( col_to_encode )
+
+    #
+
+    num_of_rows = df.shape[ 0 ]
+
+    for unique_value in unique_values:
+
+        df[ f'{ colname_to_encode }_{ unique_value }' ] = np.zeros( num_of_rows, dtype = int )
+
+    #
+
+    for index, value in enumerate( col_to_encode ):
+
+        df.at[ index, f'{ colname_to_encode }_{ value }' ] = 1
+
+
 # ### Functions unrelated to calculated fields but are important vvv
 
-# In[65]:
+# In[27]:
 
 
 def origin_dir():
@@ -1264,7 +1336,7 @@ def origin_dir():
                 return path
 
 
-# In[66]:
+# In[28]:
 
 
 def retrieve_metadata_df():
@@ -1280,7 +1352,7 @@ def retrieve_metadata_df():
     return metadata_df
 
 
-# In[67]:
+# In[29]:
 
 
 def list_gmIDs():
@@ -1313,7 +1385,7 @@ def list_gmIDs():
     return gmID_list
 
 
-# In[68]:
+# In[30]:
 
 
 def list_topics():
@@ -1350,7 +1422,7 @@ def list_topics():
     return topic_list
 
 
-# In[69]:
+# In[31]:
 
 
 def retrieve_gmID_topic( gmID, topic ):
@@ -1387,7 +1459,7 @@ def retrieve_gmID_topic( gmID, topic ):
     return gmID_topic_df
 
 
-# In[70]:
+# In[32]:
 
 
 def retrieve_gmID_preprocessed_moving_data( gmID, window_seconds ):
@@ -1399,7 +1471,7 @@ def retrieve_gmID_preprocessed_moving_data( gmID, window_seconds ):
     return gmID_preprocessed_moving_data_df
 
 
-# In[82]:
+# In[33]:
 
 
 def retrieve_gmID_preprocessed_moving_data_v2( gmID, moving_window ): # moving_window -> sec
@@ -1411,7 +1483,31 @@ def retrieve_gmID_preprocessed_moving_data_v2( gmID, moving_window ): # moving_w
     return gmID_preprocessed_moving_data_df
 
 
-# In[71]:
+# In[2]:
+
+
+def retrieve_gmID_preprocessed_moving_data_v3( gmID, moving_window ): # moving_window -> sec
+
+    path = f'{ origin_dir() }/Preprocessed_Moving_Data_v3/{ moving_window }sec_moving_window/{ gmID }/{ gmID }.csv'
+
+    gmID_preprocessed_moving_data_df = pd.read_csv( path )
+
+    return gmID_preprocessed_moving_data_df
+
+
+# In[ ]:
+
+
+def retrieve_gmID_preprocessed_moving_data_v3_reduced( gmID, moving_window ): # moving_window -> sec
+
+    path = f'{ origin_dir() }/Preprocessed_Moving_Data_v3_reduced/{ moving_window }sec_moving_window/{ gmID }/{ gmID }.csv'
+
+    gmID_preprocessed_moving_data_df = pd.read_csv( path )
+
+    return gmID_preprocessed_moving_data_df
+
+
+# In[34]:
 
 
 def give_route( gmID ):
@@ -1459,7 +1555,7 @@ def give_route( gmID ):
         raise Exception( f'{ gmID } is not valid' )
 
 
-# In[72]:
+# In[35]:
 
 
 def list_whitelisted_gmIDs():
@@ -1473,7 +1569,7 @@ def list_whitelisted_gmIDs():
     return list( whitelisted_gmIDs_set )
 
 
-# In[73]:
+# In[36]:
 
 
 def list_blacklisted_gmIDs():
@@ -1487,7 +1583,7 @@ def list_blacklisted_gmIDs():
     return list( blacklisted_gmIDs_set )
 
 
-# In[74]:
+# In[37]:
 
 
 def list_whitelisted_gmIDs_with_traffic_data():
@@ -1503,7 +1599,7 @@ def list_whitelisted_gmIDs_with_traffic_data():
     return whitelisted_gmIDs_with_traffic_data
 
 
-# In[75]:
+# In[38]:
 
 
 def random_list_split( input_list, split_percentage = 0.5 ):
@@ -1523,7 +1619,7 @@ def random_list_split( input_list, split_percentage = 0.5 ):
     return split_list1, split_list2
 
 
-# In[76]:
+# In[39]:
 
 
 def confusion_matrix_values( prediction_col, true_col ):
@@ -1573,7 +1669,7 @@ def confusion_matrix_values( prediction_col, true_col ):
     return true_positive_num, true_negative_num, false_positive_num, false_negative_num
 
 
-# In[77]:
+# In[40]:
 
 
 def BinaryClassification_DecisionTree( train_dfs, \
@@ -1617,7 +1713,7 @@ def BinaryClassification_DecisionTree( train_dfs, \
     return { 'tn' : tn, 'fp' : fp, 'fn' : fn, 'tp' : tp }, model, y_test, y_pred_test
 
 
-# In[78]:
+# In[41]:
 
 
 def BinaryClassification_DecisionTree_CV( train_dfs, \
@@ -1680,7 +1776,7 @@ def BinaryClassification_DecisionTree_CV( train_dfs, \
     return mean_validation_test_metric_value
 
 
-# In[79]:
+# In[42]:
 
 
 def mf_positive_precision( fp, tp, **kwargs ):
@@ -1700,18 +1796,6 @@ def mf_positive_recall( fn, tp, **kwargs ):
 def mf_negative_recall( tn, fp, **kwargs ):
 
     return tn / ( tn + fp )
-
-#
-
-# def mf_fbeta_score( tn, fp, fn, tp, beta = 1, **kwargs ):
-
-#    # recall is considered 'beta' times as important as precision
-
-#    precision = mf_positive_precision( fp, tp )
-
-#    recall = mf_positive_recall( fn, tp )
-
-#    return ( 1 + beta ** 2 ) * ( precision * recall ) / ( ( ( beta ** 2 ) * precision ) + recall )
 
 def mf_fbeta_score( tn, fp, fn, tp, beta = 1, **kwargs ):
 
@@ -1734,7 +1818,7 @@ def mf_balanced_accuracy( tn, fp, fn, tp, **kwargs ):
     return ( sensitivity + specificity ) / 2
 
 
-# In[80]:
+# In[43]:
 
 
 def ML_metrics( tn, fp, fn, tp, beta, display = False ):
@@ -1780,7 +1864,7 @@ def ML_metrics( tn, fp, fn, tp, beta, display = False ):
     return tn, fp, fn, tp, pprecision, precall, nrecall, fbeta_score, accuracy, baccuracy
 
 
-# In[81]:
+# In[44]:
 
 
 def unique_disengagement_recall( y_true, y_pred, true_DisengagementExpandedID_col ):
@@ -1842,14 +1926,205 @@ def unique_disengagement_recall( y_true, y_pred, true_DisengagementExpandedID_co
              'num_of_unique_DisengagementIDs' : num_of_unique_DisengagementIDs }
 
 
-# In[ ]:
+# In[45]:
 
 
+def df_undersampler( df, colname_to_undersample_by, target_diff, colname_vals_to_except = {} ):
+
+    # df needs to be sorted by 'colname_to_undersample_by'
+
+    col_to_undersample_by = np.array( df[ colname_to_undersample_by ] )
+
+    #
+
+    col_to_undersample_by_renorm = col_to_undersample_by - col_to_undersample_by[ 0 ]
+
+    #
+
+    undersampled_indexes = [ 0 ]
+
+    latest_conditional_val = 0
+
+    for index, val in enumerate( col_to_undersample_by_renorm ):
+
+        adjusted_val = val - latest_conditional_val
+
+        if ( adjusted_val >= target_diff ):
+
+            undersampled_indexes.append( index )
+
+            #
+
+            latest_conditional_val = val
+
+    #
+
+    excepted_indexes = []
+
+    if ( colname_vals_to_except != False ):
+
+        colnames = list( colname_vals_to_except.keys() )
+
+        vals = list( colname_vals_to_except.values() )
+
+        #
+
+        for colname, val in zip( colnames, vals ):
+
+            col = np.array( df[ colname ] )
+
+            #
+
+            excepted_indexes_subset = list( np.where( col == val )[ 0 ] )
+
+            #
+
+            excepted_indexes = excepted_indexes + excepted_indexes_subset
+
+        #
+
+        excepted_indexes = list( set( excepted_indexes ) - set( undersampled_indexes ) )
+
+    #
+
+    undersampled_df = df.iloc[ undersampled_indexes ]
+
+    if ( excepted_indexes != False ):
+
+        excepted_df = df.iloc[ excepted_indexes ]
+
+        output_df = pd.concat( [ undersampled_df, excepted_df ] )
+
+    else:
+
+        output_df = undersampled_df
+
+    #
+
+    output_df = output_df.sort_values( colname_to_undersample_by )
+
+    #
+
+    return output_df
 
 
-
-# In[ ]:
-
+# In[46]:
 
 
+def single_moving_window_indexer( moving_col_array, index, relative_moving_window_interval ):
+
+    renorm_moving_col_array = moving_col_array - moving_col_array[ index ]
+
+    #
+
+    window_start = relative_moving_window_interval[ 0 ]
+
+    window_end = relative_moving_window_interval[ 1 ]
+
+    #
+
+    single_moving_window_indexes = np.where( ( renorm_moving_col_array > window_start ) & \
+                                             ( renorm_moving_col_array < window_end ) )
+
+    single_moving_window_indexes = list( single_moving_window_indexes[ 0 ] )
+
+    #
+
+    return single_moving_window_indexes
+
+#
+
+def moving_window_indexer( moving_col_array, relative_moving_window_interval, handle_empty_indexes = True ):
+
+    moving_window_indexes_list = []
+
+    for index in range( len( moving_col_array ) ):
+
+        single_moving_window_indexes = single_moving_window_indexer( moving_col_array = moving_col_array, 
+                                                                     index = index, 
+                                                                     relative_moving_window_interval = relative_moving_window_interval )
+
+        #
+
+        moving_window_indexes_list.append( single_moving_window_indexes )
+
+    #
+
+    if ( handle_empty_indexes == True ):
+
+        empty_indexes = []
+
+        nonempty_indexes = []
+
+        for index, il in enumerate( moving_window_indexes_list ):
+
+            if not il:
+
+                empty_indexes.append( index )
+
+            else:
+
+                nonempty_indexes.append( index )
+
+        #
+
+        nonempty_indexes = np.array( nonempty_indexes )
+
+        for empty_index in empty_indexes:
+
+            temp_array = np.abs( nonempty_indexes - empty_index )
+
+            #
+
+            closest_nonempty_index = nonempty_indexes[ np.where( temp_array == np.min( temp_array ) )[ 0 ][ 0 ] ]
+
+            #
+
+            moving_window_indexes_list[ empty_index ] = moving_window_indexes_list[ closest_nonempty_index ]
+
+    #
+
+    return moving_window_indexes_list
+
+#
+
+def moving_window_indexes_applier( col_to_apply_array, moving_window_indexes_list, function ):
+
+    moving_function_values = []
+
+    for moving_window_indexes in moving_window_indexes_list:
+
+        col_to_apply_window = col_to_apply_array[ moving_window_indexes ]
+
+        #
+
+        moving_function_value = function( col_to_apply_window )
+
+        #
+
+        moving_function_values.append( moving_function_value )
+
+    #
+
+    return np.array( moving_function_values )
+
+
+# In[47]:
+
+
+def majority_value( array ):
+
+    values, counts = np.unique( array, return_counts = True )
+
+    #
+
+    index_w_max_count = np.argmax( counts )
+
+    #
+
+    most_frequent_value = values[ index_w_max_count ]
+
+    #
+
+    return most_frequent_value
 
