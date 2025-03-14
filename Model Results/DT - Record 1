@@ -1,0 +1,82 @@
+Decision Tree Models
+
+Data: Preprocessed_Moving_Data_v3_reduced
+
+# Models
+
+9 models: Red, Green, and Blue routes, each with 0, 2, and 4 sec moving windows
+
+X_colnames = [ 'speedMps', 'brakePercentage', 'throttlePercentage', 'steeringPercentage', 'LatLonTotalStdDev' ]
+
+y_colname = 'BinaryDisengagementExpanded'
+
+Train and Test gmIDs in ->
+
+# Hyperparameter Tuning
+
+Hyperparameters: max_depth, min_samples_split, min_samples_leaf
+
+Function Maximized: Balanced Accuracy
+
+10-Fold Cross Validation
+
+Bayesian Optimization:
+
+     parameter_bounds = { 'max_depth': ( 1, 100 ), 'min_samples_split': ( 2, 500 ), 'min_samples_leaf': ( 1, 500 ) }
+        
+     100 random search initial points, 100 bayesian optimization iterations
+
+Bayesian Optimization Results:
+
+     Red route:
+
+          0 sec: 'max_depth': 31, 'min_samples_leaf': 1, 'min_samples_split': 4
+          
+          BA: 0.551058711036643
+	
+	  2 sec: 'max_depth': 76, 'min_samples_leaf': 2, 'min_samples_split': 3
+	  
+	  BA: 0.5331496751497239
+	
+	  4 sec: 'max_depth': 92, 'min_samples_leaf': 1, 'min_samples_split': 312
+	  
+	  BA: 0.49851447132256
+	 
+     Green route:
+
+          0 sec: 'max_depth': 31, 'min_samples_leaf': 1, 'min_samples_split': 4
+          
+          BA: 0.5631993772922842
+	
+	  2 sec: 'max_depth': 21, 'min_samples_leaf': 3, 'min_samples_split': 8
+	  
+	  BA: 0.5713122321948167
+	
+	  4 sec: 'max_depth': 37, 'min_samples_leaf': 7, 'min_samples_split': 11
+	  
+	  BA: 0.5584654293914927
+	  
+     Blue route:
+
+          0 sec: 'max_depth': 91, 'min_samples_leaf': 1, 'min_samples_split': 2
+          
+          BA: 0.5776940057139462
+	
+	  2 sec: 'max_depth': 41, 'min_samples_leaf': 3, 'min_samples_split': 3
+	  
+	  BA: 0.5526114955752714
+	
+	  4 sec: 'max_depth': 75, 'min_samples_leaf': 3, 'min_samples_split': 9
+	  
+	  BA: 0.5352886219749833
+
+
+
+
+
+
+
+
+
+
+

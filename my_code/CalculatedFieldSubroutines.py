@@ -1680,6 +1680,10 @@ def BinaryClassification_DecisionTree( train_dfs, \
                                        y_labels = None, \
                                        **dt_hyperparameters ):
 
+    from sklearn.tree import DecisionTreeClassifier
+
+    from sklearn.metrics import confusion_matrix
+
     #
 
     model = DecisionTreeClassifier( random_state = dt_random_state, **dt_hyperparameters )
@@ -1726,6 +1730,8 @@ def BinaryClassification_DecisionTree_CV( train_dfs, \
                                           cv_random_state = None, \
                                           y_labels = None, \
                                           **dt_hyperparameters ):
+
+    from sklearn.model_selection import KFold
 
     #
 
