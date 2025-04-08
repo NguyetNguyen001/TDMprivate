@@ -1290,6 +1290,27 @@ def OneHotEncoder( df, colname_to_encode, unique_values = [] ):
         df.at[ index, f'{ colname_to_encode }_{ value }' ] = 1
 
 
+# In[1]:
+
+
+def solColumns(df):
+
+    # Made by Diana
+    
+    df['solChange'] = 0
+    df['Changesol'] = None
+    for index in range(1, len(df)):
+        currentType = df.loc[index, 'solType']
+        pastType = df.loc[index - 1 , 'solType']
+        if currentType == pastType:
+            df.loc[index, 'solChange'] = 0 
+        else:
+            df.loc[index, 'solChange'] = 1 
+        df.loc[index, 'Changesol'] = f'{pastType}->{currentType}'
+    firstType = df.loc[0,'solType']
+    df.loc[0,'Changesol'] = f'{firstType}->{firstType}'
+
+
 # ### Functions unrelated to calculated fields but are important vvv
 
 # In[27]:

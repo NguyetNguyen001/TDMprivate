@@ -68,5 +68,7 @@ __pycache__
 *.mp4
 /code/videos
 
+!Disengagement_Record/Videos/0f4f0a06-ea98-11ee-b297-3b0ad9d5d6c6_D1.mp4
+
 # weird MacOS thing
 *.DS_Store
